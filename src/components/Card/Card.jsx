@@ -13,6 +13,7 @@ import {
 } from "./Card.styled";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import formattedNumber from "../../services/formattedNumber";
 
 const Card = ({ cardInfo }) => {
   const [state, setState] = useState(cardInfo);
@@ -50,11 +51,6 @@ const Card = ({ cardInfo }) => {
     }
   };
 
-  const formattedNumber = state.followers.toLocaleString("en-US", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
-
   return (
     <FollowCard>
       <img
@@ -82,7 +78,7 @@ const Card = ({ cardInfo }) => {
       <Avatar imageUrl={state.avatar}></Avatar>
       <Line></Line>
       <Tweets>{state.tweets} Tweets</Tweets>
-      <Followers>{formattedNumber} Followers</Followers>
+      <Followers>{formattedNumber(state.followers)} Followers</Followers>
       <Button isFollowing={isFollowing} onClick={handleFollowClick}>
         {isFollowing ? "Following" : "Follow"}
       </Button>

@@ -6,7 +6,7 @@ import { FollowCardList } from "./CardList.styled";
 const CardList = () => {
   const [users, setUsers] = useState([]);
 
-  console.log(users);
+  // console.log(users);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -16,7 +16,7 @@ const CardList = () => {
       // setStatus(Status.PENDING);
       try {
         const users = await fetchUsers(abortController);
-        console.log(users);
+        // console.log(users);
 
         setUsers(users);
 
