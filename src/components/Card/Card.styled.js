@@ -1,7 +1,5 @@
 import { styled } from "@mui/material";
 
-// import picture from './picture.png';
-
 export const FollowCard = styled("div")({
   position: "relative",
   background:
@@ -38,29 +36,55 @@ export const Avatar = styled("div")(({ imageUrl }) => ({
   transform: "translate(-50%, -50%)",
   width: 80,
   height: 80,
+
+  zIndex: 1,
   background: "#5736A3",
   border: "8px solid #EBD8FF",
   borderRadius: "50%",
-
-  zIndex: 1,
   backgroundImage: `url("${imageUrl}")`,
   backgroundSize: "cover",
   backgroundRepeat: "no-repeat",
   backgroundPosition: "center",
 }));
 
-export const Button = styled("button")({
+// export const Button = styled("button")({
+//   position: "absolute",
+//   left: 92,
+//   top: 374,
+//   width: 196,
+//   height: 50,
+
+//   fontFamily: "inherit",
+//   fontWeight: 600,
+//   textTransform: "uppercase",
+//   fontSize: "18px",
+//   lineHeight: "22px",
+//   // background: "#EBD8FF",
+//   background: "#5CD3A8",
+//   boxShadow: "0px 3.43693px 3.43693px rgba(0, 0, 0, 0.25)",
+//   border: "none",
+//   borderRadius: "10.3108px",
+// });
+
+export const Button = styled("button")(({ isFollowing }) => ({
   position: "absolute",
   left: 92,
   top: 374,
   width: 196,
   height: 50,
 
-  background: "#EBD8FF",
+  fontFamily: "inherit",
+  fontWeight: 600,
+  textTransform: "uppercase",
+  fontSize: "18px",
+  lineHeight: "22px",
+  background: isFollowing ? "#5CD3A8" : "#EBD8FF",
+  // background: "#EBD8FF",
+  // background: "#5CD3A8",
   boxShadow: "0px 3.43693px 3.43693px rgba(0, 0, 0, 0.25)",
   border: "none",
   borderRadius: "10.3108px",
-});
+}));
 
 export const Tweets = styled("p")({
   position: "absolute",
@@ -82,8 +106,9 @@ export const Followers = styled("p")({
   // left: 83,
   left: "50%",
   transform: "translateX(-50%)",
+  width: 214,
 
-  fontWeight: 500,
+  // fontWeight: 500,
   fontSize: "20px",
   lineHeight: "24px",
   textTransform: "uppercase",

@@ -28,18 +28,18 @@ const CardList = () => {
       }
     })();
 
-    // return () => {
-    //   abortController.abort();
-    // };
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   return (
     <>
       <FollowCardList>
-        {users.length > 0 ? (
+        {users && users.length > 0 ? (
           users.map((user) => (
             <li key={user.id}>
-              <Card user={user} />
+              <Card cardInfo={user} />
             </li>
           ))
         ) : (

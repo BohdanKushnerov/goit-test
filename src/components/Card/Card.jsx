@@ -14,8 +14,8 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const Card = ({ user }) => {
-  const [state, setState] = useState(user);
+const Card = ({ cardInfo }) => {
+  const [state, setState] = useState(cardInfo);
   const [isFollowing, setIsFollowing] = useState(() => {
     return (
       JSON.parse(localStorage.getItem(`followingStatus_${state.id}`)) ?? false
@@ -50,6 +50,11 @@ const Card = ({ user }) => {
     }
   };
 
+  const formattedNumber = state.followers.toLocaleString("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+
   return (
     <FollowCard>
       <img
@@ -77,16 +82,22 @@ const Card = ({ user }) => {
       <Avatar imageUrl={state.avatar}></Avatar>
       <Line></Line>
       <Tweets>{state.tweets} Tweets</Tweets>
-      <Followers>{state.followers} Followers</Followers>
-      <Button onClick={handleFollowClick}>
-        {isFollowing ? "Unfollow" : "Follow"}
+      <Followers>{formattedNumber} Followers</Followers>
+      <Button isFollowing={isFollowing} onClick={handleFollowClick}>
+        {isFollowing ? "Following" : "Follow"}
       </Button>
     </FollowCard>
   );
 };
 
 Card.propTypes = {
-  user: PropTypes.shape({}).isRequired,
+  cardInfo: PropTypes.shape({
+    user: PropTypes.string.isRequired,
+    avatar: PropTypes.string.isRequired,
+    tweets: PropTypes.number.isRequired,
+    followers: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Card;
