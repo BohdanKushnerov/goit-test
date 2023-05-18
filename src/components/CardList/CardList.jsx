@@ -2,9 +2,17 @@ import { fetchUsers } from "../../services/FetchUsers";
 import Card from "../Card/Card";
 import { useEffect, useState } from "react";
 import { FollowCardList } from "./CardList.styled";
+import Status from "../../services/constants";
 
 const CardList = () => {
   const [users, setUsers] = useState([]);
+  const [status, setStatus] = useState(Status.IDLE);
+  console.log(status);
+
+  useEffect(() => {
+    JSON.parse(localStorage.getItem(`followingIDs`)) ??
+      localStorage.setItem(`followingIDs`, JSON.stringify([]));
+  }, []);
 
   // console.log(users);
 
@@ -13,17 +21,15 @@ const CardList = () => {
 
     // IIFE
     (async function fetch() {
-      // setStatus(Status.PENDING);
+      setStatus(Status.PENDING);
       try {
-        const users = await fetchUsers(abortController);
-        // console.log(users);
+        const fetchedUsers = await fetchUsers(abortController);
 
-        setUsers(users);
+        setUsers([...fetchedUsers]);
 
-        // setStatus(Status.RESOLVED);
+        setStatus(Status.RESOLVED);
       } catch (error) {
-        // setStatus(Status.REJECTED);
-
+        setStatus(Status.REJECTED);
         console.log(error);
       }
     })();
@@ -36,15 +42,13 @@ const CardList = () => {
   return (
     <>
       <FollowCardList>
-        {users && users.length > 0 ? (
+        {status === Status.PENDING && <p>Loading...</p>}
+        {status === Status.RESOLVED &&
           users.map((user) => (
             <li key={user.id}>
               <Card cardInfo={user} />
             </li>
-          ))
-        ) : (
-          <p>Loading...</p>
-        )}
+          ))}
       </FollowCardList>
     </>
   );

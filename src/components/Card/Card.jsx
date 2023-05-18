@@ -12,41 +12,59 @@ import {
   Tweets,
 } from "./Card.styled";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import Status from "../../services/constants";
 import formattedNumber from "../../services/formattedNumber";
 
 const Card = ({ cardInfo }) => {
   const [state, setState] = useState(cardInfo);
+  const [status, setStatus] = useState(Status.IDLE);
   const [isFollowing, setIsFollowing] = useState(() => {
-    return (
-      JSON.parse(localStorage.getItem(`followingStatus_${state.id}`)) ?? false
-    );
+    const followingIDs = JSON.parse(localStorage.getItem(`followingIDs`));
+    return followingIDs.some((id) => id === state.id);
   });
 
-  useEffect(() => {
-    localStorage.setItem(`followingStatus_${state.id}`, isFollowing.toString());
-  }, [isFollowing, state.id]);
-
   const handleFollowClick = async () => {
+    setStatus(Status.PENDING);
     try {
       if (!isFollowing) {
         const res = await axios.put(`/users/${state.id}`, {
           ...state,
           followers: (state.followers += 1),
         });
-        console.log(res);
-        setState(res.data);
+        setState((prevState) => ({
+          ...prevState,
+          followers: res.data.followers,
+        }));
+
+        const followingIDs = JSON.parse(localStorage.getItem(`followingIDs`));
+
+        localStorage.setItem(
+          `followingIDs`,
+          JSON.stringify([...followingIDs, state.id])
+        );
         setIsFollowing(true);
+        setStatus(Status.RESOLVED);
       } else {
         const res = await axios.put(`/users/${state.id}`, {
           ...state,
           followers: (state.followers -= 1),
         });
-        console.log(res);
-        setState(res.data);
+        setState((prevState) => ({
+          ...prevState,
+          followers: res.data.followers,
+        }));
+
+        const followingIDs = JSON.parse(localStorage.getItem(`followingIDs`));
+        const newArr = followingIDs.filter((id) => id !== state.id);
+        localStorage.setItem(`followingIDs`, JSON.stringify([...newArr]));
+
         setIsFollowing(false);
+        setStatus(Status.RESOLVED);
       }
     } catch (error) {
+      setStatus(Status.REJECTED);
+
       console.log(error);
     }
   };
@@ -79,7 +97,11 @@ const Card = ({ cardInfo }) => {
       <Line></Line>
       <Tweets>{state.tweets} Tweets</Tweets>
       <Followers>{formattedNumber(state.followers)} Followers</Followers>
-      <Button isFollowing={isFollowing} onClick={handleFollowClick}>
+      <Button
+        isFollowing={isFollowing}
+        onClick={handleFollowClick}
+        disabled={status === Status.PENDING}
+      >
         {isFollowing ? "Following" : "Follow"}
       </Button>
     </FollowCard>
