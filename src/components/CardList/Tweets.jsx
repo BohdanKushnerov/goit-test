@@ -1,20 +1,19 @@
-import { fetchUsers } from "../../services/FetchUsers";
+import { fetchUsers } from "../../services/fetchUsers";
 import Card from "../Card/Card";
 import { useEffect, useState } from "react";
-import { FollowCardList } from "./CardList.styled";
+import { CardList } from "./Tweets.styled";
 import Status from "../../services/constants";
+import { Box, CircularProgress, Pagination, Stack } from "@mui/material";
 
-const CardList = () => {
+const Tweets = () => {
   const [users, setUsers] = useState([]);
   const [status, setStatus] = useState(Status.IDLE);
-  console.log(status);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     JSON.parse(localStorage.getItem(`followingIDs`)) ??
       localStorage.setItem(`followingIDs`, JSON.stringify([]));
   }, []);
-
-  // console.log(users);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -23,7 +22,7 @@ const CardList = () => {
     (async function fetch() {
       setStatus(Status.PENDING);
       try {
-        const fetchedUsers = await fetchUsers(abortController);
+        const fetchedUsers = await fetchUsers(page, abortController);
 
         setUsers([...fetchedUsers]);
 
@@ -37,21 +36,38 @@ const CardList = () => {
     return () => {
       abortController.abort();
     };
-  }, []);
+  }, [page]);
+
+  const changePage = (_, newPage) => {
+    setPage(newPage);
+  };
 
   return (
     <>
-      <FollowCardList>
-        {status === Status.PENDING && <p>Loading...</p>}
-        {status === Status.RESOLVED &&
+      <CardList>
+        {users &&
+          users.length > 0 &&
           users.map((user) => (
             <li key={user.id}>
               <Card cardInfo={user} />
             </li>
           ))}
-      </FollowCardList>
+      </CardList>
+      {status === Status.PENDING && (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      )}
+      <Stack spacing={2}>
+        <Pagination
+          count={5}
+          color="primary"
+          page={page}
+          onChange={changePage}
+        />
+      </Stack>
     </>
   );
 };
 
-export default CardList;
+export default Tweets;
