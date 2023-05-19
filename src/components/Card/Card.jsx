@@ -1,91 +1,60 @@
 import PropTypes from "prop-types";
-
-import picture from "../../img/picture.png";
-import logo from "../../img/logo.png";
-
+import { useState } from "react";
+import Status from "../../services/constants";
+import formattedNumber from "../../services/formattedNumber";
+import { fetchFollowingUser } from "../../services/fetchFollowingUser";
+import { fetchFollowUser } from "../../services/fetchFollowUser";
+import useIsFollowingCard from "../../hooks/useIsFollowingCard";
+import updateStorageFollowingIDs from "../../hooks/updateStorageFollowingIDs";
 import {
   Avatar,
   Button,
   FollowCard,
   Followers,
   Line,
+  Logo,
+  Picture,
   Tweets,
 } from "./Card.styled";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import Status from "../../services/constants";
-import formattedNumber from "../../services/formattedNumber";
-
-const useIsFollowing = (cardID) => {
-  const [isFollowing, setIsFollowing] = useState(false);
-
-  useEffect(() => {
-    const followingIDs = JSON.parse(localStorage.getItem("followingIDs"));
-    setIsFollowing(followingIDs.some((id) => id === cardID));
-  }, [cardID]);
-
-  return [isFollowing, setIsFollowing];
-};
-
-const updateStorageFollowingIDs = (ID, isFollowing) => {
-  const followingIDs = JSON.parse(localStorage.getItem("followingIDs")) || [];
-
-  if (!isFollowing) {
-    localStorage.setItem("followingIDs", JSON.stringify([...followingIDs, ID]));
-  } else {
-    const newArr = followingIDs.filter((id) => id !== ID);
-    localStorage.setItem("followingIDs", JSON.stringify([...newArr]));
-  }
-};
+import picture from "../../img/picture.png";
+import logo from "../../img/logo.png";
 
 const Card = ({ cardInfo, setFilterUsers, filter }) => {
   const [state, setState] = useState(cardInfo);
   const [status, setStatus] = useState(Status.IDLE);
-  const [isFollowing, setIsFollowing] = useIsFollowing(state.id);
-
-  console.log("Render card ", state.id);
+  const [isFollowing, setIsFollowing] = useIsFollowingCard(state.id);
 
   const handleFollowClick = async () => {
     setStatus(Status.PENDING);
     try {
       if (!isFollowing) {
-        const res = await axios.put(`/users/${state.id}`, {
-          ...state,
-          followers: (state.followers += 1),
-        });
+        const followers = await fetchFollowUser(state);
         setState((prevState) => ({
           ...prevState,
-          followers: res.data.followers,
+          followers,
         }));
 
-        // ========================
         if (filter !== "show_all") {
           setFilterUsers((prevState) =>
             prevState.filter((user) => user.id !== state.id)
           );
         }
-        // ========================
 
         updateStorageFollowingIDs(state.id, isFollowing);
         setIsFollowing(true);
         setStatus(Status.RESOLVED);
       } else {
-        const res = await axios.put(`/users/${state.id}`, {
-          ...state,
-          followers: (state.followers -= 1),
-        });
+        const followers = await fetchFollowingUser(state);
         setState((prevState) => ({
           ...prevState,
-          followers: res.data.followers,
+          followers,
         }));
 
-        // ========================
         if (filter !== "show_all") {
           setFilterUsers((prevState) =>
             prevState.filter((user) => user.id !== state.id)
           );
         }
-        // ========================
 
         updateStorageFollowingIDs(state.id, isFollowing);
         setIsFollowing(false);
@@ -93,35 +62,14 @@ const Card = ({ cardInfo, setFilterUsers, filter }) => {
       }
     } catch (error) {
       setStatus(Status.REJECTED);
-
       console.log(error);
     }
   };
 
   return (
     <FollowCard>
-      <img
-        src={picture}
-        alt="picture"
-        style={{
-          position: "absolute",
-          width: 308,
-          height: 168,
-          left: 36,
-          top: 28,
-        }}
-      />
-      <img
-        src={logo}
-        alt="logo"
-        style={{
-          position: "absolute",
-          width: 76,
-          height: 22,
-          left: 20,
-          top: 20,
-        }}
-      />
+      <Logo src={logo} alt="logo" />
+      <Picture src={picture} alt="picture" />
       <Avatar imageUrl={state.avatar}></Avatar>
       <Line></Line>
       <Tweets>{state.tweets} Tweets</Tweets>

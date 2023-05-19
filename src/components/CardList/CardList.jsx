@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
-import { List } from "./CardList.styled";
-
 import Card from "../Card/Card";
+import { List } from "./CardList.styled";
 
 export const CardList = ({ users, setFilterUsers, filter }) => {
   return (
