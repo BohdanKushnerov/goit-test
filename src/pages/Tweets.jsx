@@ -89,7 +89,11 @@ const Tweets = () => {
           <option value="followings">Followings</option>
         </select>
       </div>
-      <CardList users={cardsOnCurrentPage} />
+      <CardList
+        users={cardsOnCurrentPage}
+        setFilterUsers={setFilterUsers}
+        filter={filter}
+      />
       {status === Status.PENDING && (
         <Box sx={{ display: "flex" }}>
           <CircularProgress />

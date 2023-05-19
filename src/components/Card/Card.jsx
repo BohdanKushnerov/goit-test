@@ -12,17 +12,38 @@ import {
   Tweets,
 } from "./Card.styled";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Status from "../../services/constants";
 import formattedNumber from "../../services/formattedNumber";
 
-const Card = ({ cardInfo }) => {
+const useIsFollowing = (cardID) => {
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  useEffect(() => {
+    const followingIDs = JSON.parse(localStorage.getItem("followingIDs"));
+    setIsFollowing(followingIDs.some((id) => id === cardID));
+  }, [cardID]);
+
+  return [isFollowing, setIsFollowing];
+};
+
+const updateStorageFollowingIDs = (ID, isFollowing) => {
+  const followingIDs = JSON.parse(localStorage.getItem("followingIDs")) || [];
+
+  if (!isFollowing) {
+    localStorage.setItem("followingIDs", JSON.stringify([...followingIDs, ID]));
+  } else {
+    const newArr = followingIDs.filter((id) => id !== ID);
+    localStorage.setItem("followingIDs", JSON.stringify([...newArr]));
+  }
+};
+
+const Card = ({ cardInfo, setFilterUsers, filter }) => {
   const [state, setState] = useState(cardInfo);
   const [status, setStatus] = useState(Status.IDLE);
-  const [isFollowing, setIsFollowing] = useState(() => {
-    const followingIDs = JSON.parse(localStorage.getItem(`followingIDs`));
-    return followingIDs.some((id) => id === state.id);
-  });
+  const [isFollowing, setIsFollowing] = useIsFollowing(state.id);
+
+  console.log("Render card ", state.id);
 
   const handleFollowClick = async () => {
     setStatus(Status.PENDING);
@@ -37,12 +58,15 @@ const Card = ({ cardInfo }) => {
           followers: res.data.followers,
         }));
 
-        const followingIDs = JSON.parse(localStorage.getItem(`followingIDs`));
+        // ========================
+        if (filter !== "show_all") {
+          setFilterUsers((prevState) =>
+            prevState.filter((user) => user.id !== state.id)
+          );
+        }
+        // ========================
 
-        localStorage.setItem(
-          `followingIDs`,
-          JSON.stringify([...followingIDs, state.id])
-        );
+        updateStorageFollowingIDs(state.id, isFollowing);
         setIsFollowing(true);
         setStatus(Status.RESOLVED);
       } else {
@@ -55,10 +79,15 @@ const Card = ({ cardInfo }) => {
           followers: res.data.followers,
         }));
 
-        const followingIDs = JSON.parse(localStorage.getItem(`followingIDs`));
-        const newArr = followingIDs.filter((id) => id !== state.id);
-        localStorage.setItem(`followingIDs`, JSON.stringify([...newArr]));
+        // ========================
+        if (filter !== "show_all") {
+          setFilterUsers((prevState) =>
+            prevState.filter((user) => user.id !== state.id)
+          );
+        }
+        // ========================
 
+        updateStorageFollowingIDs(state.id, isFollowing);
         setIsFollowing(false);
         setStatus(Status.RESOLVED);
       }
@@ -116,6 +145,8 @@ Card.propTypes = {
     followers: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
   }).isRequired,
+  setFilterUsers: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 };
 
 export default Card;

@@ -3,14 +3,18 @@ import { List } from "./CardList.styled";
 
 import Card from "../Card/Card";
 
-export const CardList = ({ users }) => {
+export const CardList = ({ users, setFilterUsers, filter }) => {
   return (
     <List>
       {users &&
         users.length > 0 &&
         users.map((user) => (
           <li key={user.id}>
-            <Card cardInfo={user} />
+            <Card
+              cardInfo={user}
+              setFilterUsers={setFilterUsers}
+              filter={filter}
+            />
           </li>
         ))}
     </List>
@@ -19,4 +23,6 @@ export const CardList = ({ users }) => {
 
 CardList.propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
+  setFilterUsers: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 };
