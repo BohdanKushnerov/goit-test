@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUsers } from "../services/fetchUsers";
-import Status from "../services/constants";
-import useLocalStorageInitialization from "../hooks/useLocalStorageInitialization";
-import CardFilter from "../components/CardFilter/CardFilter";
-import { CardList } from "../components/CardList/CardList";
-import Paginate from "../components/Pagination/Pagination";
+import { fetchUsers } from "../../services/fetchUsers";
+import Status from "../../constants/constants";
+import useLocalStorageInitialization from "../../hooks/useLocalStorageInitialization";
+import CardFilter from "../../components/CardFilter/CardFilter";
+import { CardList } from "../../components/CardList/CardList";
+import Paginate from "../../components/Pagination/Pagination";
 import { Box, CircularProgress } from "@mui/material";
 
 const Tweets = () => {
