@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
-import Card from "../Card/Card";
+import Card from "components/Card";
 import { List } from "./CardList.styled";
 
-export const CardList = ({ users, setFilterUsers, filter }) => {
+const CardList = ({ users, setFilterUsers, filter }) => {
   return (
     <List>
       {users &&
@@ -25,3 +25,5 @@ CardList.propTypes = {
   setFilterUsers: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
 };
+
+export default CardList;

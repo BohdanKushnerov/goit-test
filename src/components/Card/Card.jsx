@@ -1,11 +1,10 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import Status from "../../constants/constants";
-import formattedNumber from "../../utils/formattedNumber";
-import { fetchFollowingUser } from "../../services/fetchFollowingUser";
-import { fetchFollowUser } from "../../services/fetchFollowUser";
-import useIsFollowingCard from "../../hooks/useIsFollowingCard";
-import updateStorageFollowingIDs from "../../hooks/updateStorageFollowingIDs";
+import { picture, logo } from "assets/images";
+import Status from "constants";
+import { useIsFollowingCard } from "hooks";
+import { fetchFollowingUser, fetchFollowUser } from "services";
+import { formattedNumber, updateStorageFollowingIDs } from "utils";
 import {
   Avatar,
   Button,
@@ -16,8 +15,6 @@ import {
   Picture,
   Tweets,
 } from "./Card.styled";
-import picture from "../../assets/picture.png";
-import logo from "../../assets/picture.png";
 
 const Card = ({ cardInfo, setFilterUsers, filter }) => {
   const [state, setState] = useState(cardInfo);

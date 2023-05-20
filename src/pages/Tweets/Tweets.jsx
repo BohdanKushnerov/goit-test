@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUsers } from "../../services/fetchUsers";
-import Status from "../../constants/constants";
-import useLocalStorageInitialization from "../../hooks/useLocalStorageInitialization";
-import CardFilter from "../../components/CardFilter/CardFilter";
-import { CardList } from "../../components/CardList/CardList";
-import Paginate from "../../components/Pagination/Pagination";
+import { fetchUsers } from "services";
+import Status from "constants";
+import { useLocalStorageInitialization } from "hooks";
+import CardFilter from "components/CardFilter";
+import CardList from "components/CardList";
+import Paginate from "components/Pagination";
 import { Box, CircularProgress } from "@mui/material";
 
 const Tweets = () => {
@@ -79,7 +79,7 @@ const Tweets = () => {
   }, []);
 
   return (
-    <>
+    <div>
       <button onClick={() => navigate("/")}>Back</button>
       <CardFilter filter={filter} handleFilterChange={handleFilterChange} />
       {status === Status.PENDING ? (
@@ -98,7 +98,7 @@ const Tweets = () => {
         setCurrentPage={setCurrentPage}
         count={count}
       />
-    </>
+    </div>
   );
 };
 

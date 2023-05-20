@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
-import Tweets from "./pages/Tweets/Tweets";
-import Layout from "./Layout";
-import Home from "./pages/Home/Home";
+import Layout from "components/Layout";
+import Tweets from "pages/Tweets";
+import Home from "pages/Home";
 
 const App = () => {
   return (
@@ -14,5 +14,10 @@ const App = () => {
     </Routes>
   );
 };
+
+// длинна 0 то пагинацию убрать и дабовить строку что типа нету
+// обработать еррорки
+// в кнопку добавить анимацию
+// компонент кнопки
 
 export default App;

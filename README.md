@@ -1,70 +1,31 @@
-# Getting Started with Create React App
+# Назва проекту:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Tweet Subscription Tracker
 
-## Available Scripts
+## Опис проекту:
 
-In the project directory, you can run:
+Цей проект реалізує функціональність відстеження та збереження стану підписок на твіти. Користувач може підписатися на обрану картку, натиснувши кнопку "Follow". При цьому колір та текст кнопки змінюються на "Following", а кількість фоловерів збільшується на одиницю. При оновленні сторінки зберігається кінцевий результат дій користувача, зберігаючи стан кнопки та кількість фоловерів. Повторне натискання на кнопку призводить до повернення до початкового стану, змінюючи текст та колір кнопки та зменшуючи кількість фоловерів на одиницю. Твіти, на які користувач підписався, зберігаються в локальному сховищі браузера.
 
-### `npm start`
+## Функціонал:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Підписка на твіти за допомогою кнопки "Follow" і зміна стану кнопки на "Following".
+- Збереження кінцевого стану підписок після оновлення сторінки.
+- Повернення до початкового стану при повторному натисканні на кнопку "Follow".
+- Відображення кількості фоловерів і їх зміна під час підписки та відписки.
+- Фільтрація проектів за підпискою (показати всі, показати тільки підписки, показати тільки "Following").
+- Збереження списку(id) підписок в локальному сховищі браузера.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Технології:
 
-### `npm test`
+- React
+- React Router DOM
+- Material-UI (MUI)
+- Axios
+- GitHub
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Інструкція з запуску:
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Клонуйте репозиторій з проектом.
+2. Виконайте команду npm install, щоб встановити необхідні залежності.
+3. Виконайте команду npm start, щоб запустити проект.
+4. Відкрийте веб-браузер і перейдіть за адресою http://localhost:3000, щоб переглянути додаток.
