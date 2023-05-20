@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { fetchUsers } from "../services/fetchUsers";
 import Status from "../services/constants";
 import useLocalStorageInitialization from "../hooks/useLocalStorageInitialization";
@@ -13,6 +14,7 @@ const Tweets = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("show_all");
   const [filterUsers, setFilterUsers] = useState([]);
+  const navigate = useNavigate();
   useLocalStorageInitialization("followingIDs", []);
 
   const cardsPerPage = 4;
@@ -78,6 +80,7 @@ const Tweets = () => {
 
   return (
     <>
+      <button onClick={() => navigate("/")}>Back</button>
       <CardFilter filter={filter} handleFilterChange={handleFilterChange} />
       {status === Status.PENDING ? (
         <Box sx={{ display: "flex" }}>
