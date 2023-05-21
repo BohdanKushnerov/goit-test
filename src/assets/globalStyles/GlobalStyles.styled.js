@@ -5,13 +5,14 @@ const GlobalStyles = () => (
     styles={css`
       body {
         margin: 0;
-        padding: 8px 16px;
+        padding: 16px;
 
         font-family: "Montserrat", sans-serif;
         font-style: normal;
         font-weight: 500;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        background-color: #fffdef;
       }
 
       h1,

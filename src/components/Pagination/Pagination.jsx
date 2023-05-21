@@ -7,7 +7,13 @@ const Paginate = ({ currentPage, setCurrentPage, count }) => {
   };
 
   return (
-    <Stack spacing={2}>
+    <Stack
+      spacing={2}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
       <Pagination
         count={count}
         color="primary"

@@ -6,7 +6,12 @@ import { useLocalStorageInitialization } from "hooks";
 import CardFilter from "components/CardFilter";
 import CardList from "components/CardList";
 import Paginate from "components/Pagination";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
+import {
+  TweetsPageContainer,
+  TweetsPageContent,
+  TweetsPageActivityWrap,
+} from "./Tweets.styled";
 
 const Tweets = () => {
   const [users, setUsers] = useState([]);
@@ -17,7 +22,7 @@ const Tweets = () => {
   const navigate = useNavigate();
   useLocalStorageInitialization("followingIDs", []);
 
-  const cardsPerPage = 4;
+  const cardsPerPage = 3;
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
   const cardsOnCurrentPage = filterUsers.slice(
@@ -27,7 +32,7 @@ const Tweets = () => {
   const count = Math.ceil(filterUsers.length / cardsPerPage);
 
   if (cardsOnCurrentPage.length === 0 && currentPage !== 1) {
-    setCurrentPage((prev) => prev - 1);
+    setCurrentPage((prev) => (prev -= 1));
   }
 
   useEffect(() => {
@@ -79,26 +84,59 @@ const Tweets = () => {
   }, []);
 
   return (
-    <div>
-      <button onClick={() => navigate("/")}>Back</button>
-      <CardFilter filter={filter} handleFilterChange={handleFilterChange} />
-      {status === Status.PENDING ? (
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress />
-        </Box>
+    <TweetsPageContainer>
+      {status === Status.REJECTED ? (
+        <h2>
+          An error occurred, we could not upload the data, please try reloading
+          the page and try again :)
+        </h2>
       ) : (
-        <CardList
-          users={cardsOnCurrentPage}
-          setFilterUsers={setFilterUsers}
-          filter={filter}
-        />
+        <TweetsPageContent>
+          <TweetsPageActivityWrap>
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => navigate("/")}
+            >
+              {"\u2190"} Back Home
+            </Button>
+            {status === Status.RESOLVED && (
+              <CardFilter
+                filter={filter}
+                handleFilterChange={handleFilterChange}
+              />
+            )}
+          </TweetsPageActivityWrap>
+          {status === Status.PENDING && (
+            <Box sx={{ margin: "0 auto" }}>
+              <CircularProgress size={150} />
+            </Box>
+          )}
+          {cardsOnCurrentPage.length === 0 && filter !== "show_all" ? (
+            <h2>
+              {filter === "followings"
+                ? "There are no tweets you follow"
+                : "You are subscribed to all suggested tweets"}
+            </h2>
+          ) : (
+            status === Status.RESOLVED && (
+              <>
+                <CardList
+                  users={cardsOnCurrentPage}
+                  setFilterUsers={setFilterUsers}
+                  filter={filter}
+                />
+                <Paginate
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  count={count}
+                />
+              </>
+            )
+          )}
+        </TweetsPageContent>
       )}
-      <Paginate
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        count={count}
-      />
-    </div>
+    </TweetsPageContainer>
   );
 };
 

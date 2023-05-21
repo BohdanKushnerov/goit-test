@@ -15,6 +15,8 @@ import {
   Picture,
   Tweets,
 } from "./Card.styled";
+import { Box, CircularProgress } from "@mui/material";
+import { toast } from "react-toastify";
 
 const Card = ({ cardInfo, setFilterUsers, filter }) => {
   const [state, setState] = useState(cardInfo);
@@ -74,10 +76,27 @@ const Card = ({ cardInfo, setFilterUsers, filter }) => {
       <Button
         isFollowing={isFollowing}
         onClick={handleFollowClick}
-        disabled={status === Status.PENDING}
+        disabled={status === Status.PENDING || status === Status.REJECTED}
       >
-        {isFollowing ? "Following" : "Follow"}
+        {status === Status.REJECTED ? (
+          <div>Error...</div>
+        ) : (
+          <>
+            {status !== Status.PENDING && (
+              <Box>{isFollowing ? "Following" : "Follow"}</Box>
+            )}
+            {status === Status.PENDING && (
+              <Box>
+                <CircularProgress size={24} />
+              </Box>
+            )}
+          </>
+        )}
       </Button>
+      {status === Status.REJECTED &&
+        toast.error(
+          "Error...please check your internet connection and reload page!"
+        )}
     </FollowCard>
   );
 };
