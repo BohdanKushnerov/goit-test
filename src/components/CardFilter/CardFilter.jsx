@@ -5,13 +5,13 @@ const CardFilter = ({ filter, handleFilterChange }) => {
   return (
     <Box sx={{ minWidth: 150 }}>
       <FormControl>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+        <InputLabel variant="standard" htmlFor="controlled-native">
           Filter
         </InputLabel>
         <NativeSelect
           inputProps={{
             name: "Filter",
-            id: "uncontrolled-native",
+            id: "controlled-native",
           }}
           value={filter}
           onChange={handleFilterChange}
