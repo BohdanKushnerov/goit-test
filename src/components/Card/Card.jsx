@@ -22,8 +22,6 @@ const Card = ({ cardInfo, setFilterUsers, filter }) => {
   const [status, setStatus] = useState(Status.IDLE);
   const [isFollowing, setIsFollowing] = useIsFollowingCard(currentCardUser.id);
 
-  console.log("rerender ", currentCardUser.id);
-
   const handleFollowClick = async () => {
     setStatus(Status.PENDING);
     try {
