@@ -18,43 +18,45 @@ import { toast } from "react-toastify";
 import FollowButton from "components/FollowButton";
 
 const Card = ({ cardInfo, setFilterUsers, filter }) => {
-  const [state, setState] = useState(cardInfo);
+  const [currentCardUser, setCurrentCardUser] = useState(cardInfo);
   const [status, setStatus] = useState(Status.IDLE);
-  const [isFollowing, setIsFollowing] = useIsFollowingCard(state.id);
+  const [isFollowing, setIsFollowing] = useIsFollowingCard(currentCardUser.id);
+
+  console.log("rerender ", currentCardUser.id);
 
   const handleFollowClick = async () => {
     setStatus(Status.PENDING);
     try {
       if (!isFollowing) {
-        const followers = await fetchFollowUser(state);
-        setState((prevState) => ({
+        const followers = await fetchFollowUser(currentCardUser);
+        setCurrentCardUser((prevState) => ({
           ...prevState,
           followers,
         }));
 
         if (filter !== "show_all") {
           setFilterUsers((prevState) =>
-            prevState.filter((user) => user.id !== state.id)
+            prevState.filter((user) => user.id !== currentCardUser.id)
           );
         }
 
-        updateStorageFollowingIDs(state.id, isFollowing);
+        updateStorageFollowingIDs(currentCardUser.id, isFollowing);
         setIsFollowing(true);
         setStatus(Status.RESOLVED);
       } else {
-        const followers = await fetchFollowingUser(state);
-        setState((prevState) => ({
+        const followers = await fetchFollowingUser(currentCardUser);
+        setCurrentCardUser((prevState) => ({
           ...prevState,
           followers,
         }));
 
         if (filter !== "show_all") {
           setFilterUsers((prevState) =>
-            prevState.filter((user) => user.id !== state.id)
+            prevState.filter((user) => user.id !== currentCardUser.id)
           );
         }
 
-        updateStorageFollowingIDs(state.id, isFollowing);
+        updateStorageFollowingIDs(currentCardUser.id, isFollowing);
         setIsFollowing(false);
         setStatus(Status.RESOLVED);
       }
@@ -68,10 +70,12 @@ const Card = ({ cardInfo, setFilterUsers, filter }) => {
     <FollowCard>
       <Logo src={logo} alt="logo" />
       <Picture src={picture} alt="picture" />
-      <Avatar imageUrl={state.avatar}></Avatar>
+      <Avatar imageUrl={currentCardUser.avatar}></Avatar>
       <Line></Line>
-      <Tweets>{state.tweets} Tweets</Tweets>
-      <Followers>{formattedNumber(state.followers)} Followers</Followers>
+      <Tweets>{currentCardUser.tweets} Tweets</Tweets>
+      <Followers>
+        {formattedNumber(currentCardUser.followers)} Followers
+      </Followers>
       <FollowButton
         isFollowing={isFollowing}
         handleFollowClick={handleFollowClick}
