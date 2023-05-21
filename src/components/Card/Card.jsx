@@ -7,7 +7,6 @@ import { fetchFollowingUser, fetchFollowUser } from "services";
 import { formattedNumber, updateStorageFollowingIDs } from "utils";
 import {
   Avatar,
-  Button,
   FollowCard,
   Followers,
   Line,
@@ -15,8 +14,8 @@ import {
   Picture,
   Tweets,
 } from "./Card.styled";
-import { Box, CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
+import FollowButton from "components/FollowButton";
 
 const Card = ({ cardInfo, setFilterUsers, filter }) => {
   const [state, setState] = useState(cardInfo);
@@ -73,26 +72,11 @@ const Card = ({ cardInfo, setFilterUsers, filter }) => {
       <Line></Line>
       <Tweets>{state.tweets} Tweets</Tweets>
       <Followers>{formattedNumber(state.followers)} Followers</Followers>
-      <Button
+      <FollowButton
         isFollowing={isFollowing}
-        onClick={handleFollowClick}
-        disabled={status === Status.PENDING || status === Status.REJECTED}
-      >
-        {status === Status.REJECTED ? (
-          <div>Error...</div>
-        ) : (
-          <>
-            {status !== Status.PENDING && (
-              <Box>{isFollowing ? "Following" : "Follow"}</Box>
-            )}
-            {status === Status.PENDING && (
-              <Box>
-                <CircularProgress size={24} />
-              </Box>
-            )}
-          </>
-        )}
-      </Button>
+        handleFollowClick={handleFollowClick}
+        status={status}
+      />
       {status === Status.REJECTED &&
         toast.error(
           "Error...please check your internet connection and reload page!"
